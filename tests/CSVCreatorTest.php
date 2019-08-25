@@ -1,10 +1,11 @@
 <?php declare(strict_types=1);
 namespace DanielZielkaRekrutacjaHRtec\tests\CSVCreatorTest;
 
-use PHPUnit\Framework\TestCase;
-use DanielZielkaRekrutacjaHRtec\services\CSVCreator;
-use DanielZielkaRekrutacjaHRtec\models\Feed;
 use LogicException;
+use ReflectionClass;
+use PHPUnit\Framework\TestCase;
+use DanielZielkaRekrutacjaHRtec\models\Feed;
+use DanielZielkaRekrutacjaHRtec\services\CSVCreator;
 
 
 class CSVCreatorTest extends TestCase
@@ -31,28 +32,43 @@ class CSVCreatorTest extends TestCase
         }
     }
 
-    public function testSettersAndGettersForSchema()
+    public function testSettersForSchema()
     {
         $creator = new CSVCreator();
         $creator->setSchema($this->schema);
 
-        $this->assertEquals($creator->schema, $this->schema);
+        $creatorReflection = new ReflectionClass($creator);
+
+        $propertySchema = $creatorReflection->getProperty('schema');
+        $propertySchema->setAccessible(true);
+
+        $this->assertEquals($propertySchema->getValue($creator), $this->schema);
     }
 
-    public function testSettersAndGettersForData()
+    public function testSettersForData()
     {
         $creator = new CSVCreator();
         $creator->setData($this->feedData);
 
-        $this->assertEquals($creator->data, $this->feedData);
+        $creatorReflection = new ReflectionClass($creator);
+
+        $propertyData = $creatorReflection->getProperty('data');
+        $propertyData->setAccessible(true);
+
+        $this->assertEquals($propertyData->getValue($creator), $this->feedData);
     }
 
-    public function testSettersAndGettersForFile()
+    public function testSettersForFile()
     {
         $creator = new CSVCreator();
         $creator->setFile($this->filePath);
 
-        $this->assertEquals($creator->file, $this->filePath);
+        $creatorReflection = new ReflectionClass($creator);
+
+        $propertyFile = $creatorReflection->getProperty('file');
+        $propertyFile->setAccessible(true);
+
+        $this->assertEquals($propertyFile->getValue($creator), $this->filePath);
     }
 
     public function testExtendedSetterDoesFileExtist()
@@ -64,13 +80,18 @@ class CSVCreatorTest extends TestCase
         $creator->setExtended(true);
     }
 
-    public function testSettersAndGettersForExtended()
+    public function testExtendedCheckingFileExists()
     {
         $creator = new CSVCreator();
         $creator->setFile($this->filePath)->setExtended(true);
 
+        $creatorReflection = new ReflectionClass($creator);
+
+        $propertyExtended = $creatorReflection->getProperty('extended');
+        $propertyExtended->setAccessible(true);
+
         //extended should be equal to bool returned by file_exists
-        $this->assertEquals(file_exists($this->filePath), $creator->extended);
+        $this->assertEquals(file_exists($this->filePath), $propertyExtended->getValue($creator));
     }
 
     public function testCSVFileGenerationNoFileSetValidation()

@@ -11,32 +11,11 @@ class CSVCreator
     private $extended = false;
 
 
-    public function __get(string $param)
-    {
-        $method = 'get' . ucfirst($param);
-
-        if (method_exists($this, $method)) {
-            return $this->$method();
-        }
-
-        throw new \InvalidArgumentException($param . ' does not exist in model Feed.');
-    }
-
-    public function getSchema(): array
-    {
-        return $this->schema;
-    }
-
     public function setSchema(array $schema): self
     {
         $this->schema = $schema;
 
         return $this;
-    }
-
-    public function getData(): array
-    {
-        return $this->data;
     }
 
     public function setData(array $data): self
@@ -46,21 +25,11 @@ class CSVCreator
         return $this;
     }
 
-    public function getFile(): string
-    {
-        return $this->file;
-    }
-
     public function setFile(string $file): self
     {
         $this->file = $file;
 
         return $this;
-    }
-
-    public function getExtended(): bool
-    {
-        return $this->extended;
     }
 
     public function setExtended(bool $extended): self

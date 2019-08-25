@@ -20,7 +20,7 @@ class PolishDateTime extends DateTime
         "Dec" => "Grudzień"
     ];
 
-    public function format($format)
+    public function format($format): string
     {
         $engDate = parent::format($format);
 
